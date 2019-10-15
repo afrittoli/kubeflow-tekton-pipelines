@@ -6,6 +6,7 @@ spec:
   params:
     - name: face
       description: which face of the coin are we looking for
+      type: string
   resources:
     - name: coin
       type: storage
@@ -27,6 +28,7 @@ spec:
   params:
     - name: threshold
       description: the number that we should be greater than
+      type: string
   resources:
     - name: random
       type: storage
@@ -48,6 +50,7 @@ spec:
   params:
     - name: threshold
       description: the number that we should be less or equal to
+      type: string
   resources:
     - name: random
       type: storage
@@ -121,12 +124,11 @@ spec:
     - name: echo
       image: python:alpine3.6
       command:
-        - echo
+        - /bin/sh
       args:
         - -ce
         - |
-          RANDOM=$(cat $(inputs.resources.random.path)/random.txt)
-          python -c "print($(inputs.params.message) % $RANDOM)"
+          python -c "print(\"$(inputs.params.message)\" % \"$(cat $(inputs.resources.random.path)/random.txt)\")"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
@@ -155,7 +157,7 @@ spec:
       - conditionRef: coin
         params:
           - name: face
-            value: head
+            value: heads
         resources:
           - name: coin
             resource: coin
@@ -177,7 +179,7 @@ spec:
       - conditionRef: coin
         params:
           - name: face
-            value: tail
+            value: tails
         resources:
           - name: coin
             resource: coin
@@ -205,7 +207,7 @@ spec:
             resource: random
     params:
       - name: message
-        value: "tail and %s > 15"
+        value: "tails and %s > 15"
     resources:
       inputs:
         - name: random
@@ -225,7 +227,7 @@ spec:
             resource: random
     params:
       - name: message
-        value: "tail and %s <= 15"
+        value: "tails and %s <= 15"
     resources:
       inputs:
         - name: random
@@ -245,7 +247,7 @@ spec:
             resource: random
     params:
       - name: message
-        value: "head and %s > 5"
+        value: "heads and %s > 5"
     resources:
       inputs:
         - name: random
@@ -265,7 +267,7 @@ spec:
             resource: random
     params:
       - name: message
-        value: "head and %s <= 5"
+        value: "heads and %s <= 5"
     resources:
       inputs:
         - name: random
