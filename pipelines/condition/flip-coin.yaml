@@ -39,8 +39,8 @@ spec:
     args:
     - -ce
     - |
-      RANDOM=$(cat $(resources.random.path)/random.txt)
-      [ "$RANDOM" -gt "$(params.threshold)" ]
+      MYRANDOM=$(cat $(resources.random.path)/random.txt)
+      [ "$MYRANDOM" -gt "$(params.threshold)" ]
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Condition
@@ -61,8 +61,8 @@ spec:
     args:
     - -ce
     - |
-      RANDOM=$(cat $(resources.random.path)/random.txt)
-      [ "$RANDOM" -le "$(params.threshold)" ]
+      MYRANDOM=$(cat $(resources.random.path)/random.txt)
+      [ "$MYRANDOM" -le "$(params.threshold)" ]
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
